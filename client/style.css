@@ -1,0 +1,19 @@
+html, body { margin: 0; padding: 0;overflow:hidden;}
+#body {
+  position: absolute;
+  overflow: hidden;
+  color: green;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  zoom: reset;
+}
+#canvas {
+  position: static;
+  overflow: hidden;
+  background-color: lightblue;
+  width: 100%;
+  object-fit: fill;
+  margin: 0; padding: 0;
+}

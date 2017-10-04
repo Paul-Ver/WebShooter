@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Multiplayer Shooter</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js"></script>
+	<link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+  <script src="main.js"></script>
+  <script>connect("http://127.0.0.1:8001", { query: "username=peter"+Math.floor((Math.random() * 10) + 1)});</script>
+  </body>
+</html>
