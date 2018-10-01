@@ -1,0 +1,25 @@
+{
+  "name": "webshooter-server",
+  "version": "0.0.1",
+  "description": "Multiplayer Shooter - Dedicated Server",
+  "main": "main.js",
+  "dependencies": {
+    "ws": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Paul-Ver/WebShooter/"
+  },
+  "keywords": [
+    "Multiplayer",
+    "Shooter",
+    "Web",
+    "Socket"
+  ],
+  "author": "Paul-Ver (https://github.com/Paul-Ver)",
+  "license": "CC-BY-NC-ND-4.0"
+}

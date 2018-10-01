@@ -1,11 +1,33 @@
-function connect(server,connectionData){
-	var socket = io.connect(server,connectionData);
-	
+var debugLevel = 10;
+var playerList = new Array();
+
+
+function log(priority, message, color){
+	if(debugLevel >= priority){
+		console.log(message);
+	}
+}
+
+class OtherPlayer extends playerBody{
+	constructor(){
+		super();
+	}
+}
+
+var canvas = document.getElementById("game");
+var ctx = canvas.getContext("2d");
+var socket;
+var reconnect;
+var reconnecting = false;
+var server;
+var name;
+
+function start(){
 	//Set up canvas
-	var canvas = document.createElement("canvas");
-	canvas.innerHTML="Your browser doesn't support canvas. Try google chrome."
-	document.body.appendChild(canvas);
-	var ctx = canvas.getContext("2d");
+	//canvas.setAttribute("id", "game");
+	//document.body.appendChild(canvas);
+	canvas.innerHTML="Your browser doesn't support canvas. Try updating or google chrome.";
+	
 	canvas.style.backgroundColor = 'rgba(158, 167, 184, 0.2)';
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -21,6 +43,7 @@ function connect(server,connectionData){
 		{
 			canvas.height = window.innerHeight;
 		}
+		log(5,"Resize: " + canvas.width + " x " + canvas.height);
 	}
 	//function resize_canvas(){}
 	window.addEventListener("resize", resize_canvas);
@@ -34,21 +57,53 @@ function connect(server,connectionData){
 	requestAnimationFrame(main);//Start loop
 	function main(timestamp){
 		ctx.clearRect(0,0, window.innerWidth,window.innerHeight);
+		ctx.beginPath();
 		delta = timestamp - then;
-		if(socket.connected){
-			//ctx.fillText("Amount of players: " + (playerList.length+1),10,60);
-			//updateObjects(delta / 1000);
-			//renderObjects(delta / 1000);
-			//console.log("Connected");
+		if(socket.readyState === socket.OPEN){
+			clearTimeout(reconnect);
+			reconnecting = false;
+			updateObjects(delta / 1000);
+			renderObjects(delta / 1000);
+			renderGUI(10,canvas.height-(chatListLength*10+10));
 			ctx.fillText("Connected!",10,20);
 			then = timestamp;//Update delta-timing
 			requestAnimationFrame(main);
 		}else{
 			ctx.fillText("Not connected!",10,20);
-			ctx.fillText("Trying to connect",10,30);
-			console.log("CONNECTED: " + socket.connected);
+			if(reconnecting == false){
+				ctx.fillText("Trying to reconnect.",10,30);
+				reconnecting = true;
+				clearTimeout(reconnect);
+				reconnect = setTimeout(()=>{
+					socket.close();
+					socket = undefined;
+					connect(server,name);
+				},5000);
+			}
 			setTimeout(main,1000);
 		}
 	};
 }
+
+//Render objects and player
+function renderObjects(delta){
+	playerList.forEach(function(element) {
+		ctx.beginPath();
+		if(element !== undefined){
+			element.render(delta,"[" + element.id + "] " + element.name);
+		}
+	});	
+	ctx.beginPath(); 
+		player.render(delta,"Jij");
+}
+function updateObjects(delta){
+	playerList.forEach(function(element) {
+		if(element !== undefined){
+			element.update();
+		}
+	});
+	player.update();
+}
+
+
 
