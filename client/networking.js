@@ -7,23 +7,23 @@ function connect(uri,nom){
 	  var args = String(event.data).split(',');
 	  console.log(args);
 	  switch(parseInt(args[0])){
-		  case 0://Player join
+		  case msgEnum.join://Player join
 			playerList[parseInt(args[1])] = new OtherPlayer();
 			playerList[parseInt(args[1])].name = args[2];
 			playerList[parseInt(args[1])].id = args[1];
 		  break;
-		  case 1://Player leave
+		  case msgEnum.leave://Player leave
 			playerList[parseInt(args[1])] = undefined;
 		  break;
-		  case 2://Player location change
+		  case msgEnum.location://Player location change
 			//2 , ID , X , Y
 			playerList[parseInt(args[1])].x = args[2];
 			playerList[parseInt(args[1])].y = args[3];
 		  break;
-		  case 3://Rename
+		  case msgEnum.rename://Rename
 			playerList[parseInt(args[1])].name = args[2];
 		  break;
-		  case 4://Chat message
+		  case msgEnum.chat://Chat message
 			if(args[1] == -1){
 				addToChat("[SERVER] "+args[2]);
 				//console.log("[Server]:",args[2]);
@@ -32,7 +32,6 @@ function connect(uri,nom){
 			}
 		  break;
 	  }
-	  
 	}
 	socket.onerror = function (err){
 		console.log("Socket.onerror:",err);

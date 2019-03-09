@@ -15,19 +15,19 @@ const rl = readline.createInterface({
 
 var stopTimer;
 rl.on('line', (line) => {
-  console.log(`Command sent: ${line}`);
+  log(`Command sent: ${line}`);
   commands = line.split(" ");
   switch(commands[0]){
 	case "/help":
-		console.log("/kick [playerID] (reason) to kick a player from the game.\r\n/stop (seconds) to stop server. /clear to clear a stop timer.");
+		log("/kick [playerID] (reason) to kick a player from the game.\r\n/stop (seconds) to stop server. /clear to clear a stop timer.");
 	break;
 	case "/kick":
 		if(!commands[1]){
-			console.log("No player given, usage: /kick [playerID]");
+			log("No player given, usage: /kick [playerID]");
 		}else{
 			wss.clients.forEach(function each(client) {
 				if(client.playerid == commands[1]){
-					console.log("JA");
+					log("JA");
 					client.close();
 				}
 			  });
@@ -36,7 +36,7 @@ rl.on('line', (line) => {
 	break;
 	case "/stop":
 		if(commands[1]){
-			console.log("Set server to quit in: " + commands[1] + " seconds with reason: " + commands[2]);
+			log("Set server to quit in: " + commands[1] + " seconds with reason: " + commands[2]);
 			stopTimer = setTimeout((function() {  
 				return process.exit(0);
 			}), commands[1]*1000);
@@ -51,7 +51,7 @@ rl.on('line', (line) => {
 	break;
 	default:
 		broadcast(4+","+-1+","+line);	
-		//console.log("Command not found, try: /help");
+		log("Command not found, try: /help");
 	break;
   }
 });
@@ -59,11 +59,11 @@ rl.on('line', (line) => {
 
 var maxPlayers = 20;
 var playerList = new Array(maxPlayers).fill();
-console.log("Server started, max players:",maxPlayers);
+log("Server started, max players:",maxPlayers);
 
 
 wss.on('connection', function connection(ws) {
-	console.log("Client connected.");
+	log("Client connected.");
 	//Create Player
 	var player = {};
 	player.name = "Not set";
@@ -77,7 +77,7 @@ wss.on('connection', function connection(ws) {
 	if(id >= maxPlayers){
 		ws.terminate();
 		ws.close();
-		console.log("Server is full!");
+		log("Server is full!");
 		return;
 	}
 	//If a player joins, send him all current players.
@@ -89,16 +89,16 @@ wss.on('connection', function connection(ws) {
 	playerList[id] = player;
 	playerList[id].id = id;
 	ws.playerid = id;
-	console.log("Player List:",playerList);
+	log("Player List:",playerList);
 	//Send the other players the new who joined.
-	console.log(id + " joined.");
+	log(id + " joined.");
 	broadcast(0/*connect*/ + "," + player.id,ws);
 	
 	
 	ws.on('message', (msg)=>{
-		//console.log(msg);
+		//log(msg);
 		var args = String(msg).split(",");
-		//console.log("RECEIVE:",args);
+		//log("RECEIVE:",args);
 		switch(parseInt(args[0])){
 			case 2: //location
 				player.x = parseInt(args[1]);
@@ -108,11 +108,11 @@ wss.on('connection', function connection(ws) {
 			case 3: //set name
 				broadcast(3/*set name*/ + "," + player.id + "," + args[1],ws);
 				player.name = args[1];
-				console.log("Player name changed",player.name);
+				log(player.id + " name changed",player.name);
 			break;
 			case 4:
 				broadcast(4/*send chat*/ + "," + player.id + "," + args[1],ws);
-				console.log(id + " said: " + args[1]);
+				log(id + " said: " + args[1]);
 			break;
 		}
 	});
@@ -120,10 +120,10 @@ wss.on('connection', function connection(ws) {
 	ws.isAlive = true;
 	ws.on('pong', heartbeat);
 	ws.on('error', (err)=>{
-		console.log(err); 
+		log(err); 
 	});
 	ws.on('close', ()=>{
-		console.log(player.id + " - " + player.name + " has left the server.");
+		log(player.id + " - " + player.name + " has left the server.");
 		broadcast(1/*Disconnect*/ + "," + player.id,ws);
 		delete playerList[id];
 	});
@@ -162,3 +162,11 @@ const interval = setInterval(function ping() {
 }, 10000);
 function noop() {}
 
+function log(){
+	// 1. Convert args to a normal array
+	var args = Array.prototype.slice.call(arguments);
+	// 2. Prepend log prefix log string
+	args.unshift(new Date().toISOString() + " :");
+	// 3. Pass along arguments to console.log
+	console.log.apply(console, args);
+}
