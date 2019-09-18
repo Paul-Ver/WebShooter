@@ -5,6 +5,7 @@ HTML5 Top Down Shooter - HTTPS/WSS (Secured)
 To play the game, you can simply join it on https://www.fuaze.nl/game/
 
 Based on tutorials by RainingChain
+
 Inspired by Uniqc "Afterwars" (Gamemaker game)
 
 ![alt text](https://github.com/Paul-Ver/WebShooter/blob/master/preview.gif "Example screenshot.")
@@ -52,3 +53,9 @@ If you make any changes to the server/client, please consider sending a pull req
 If you think this project is interesting, please support it by contributing.
 You should help develop this project, rather than create your own rip-off ;)
 The reasoning behind this is that we will all benefit from having "one good source" instead of having multiple "half finished" projects.
+
+Do mind this project is licensed under `Creative Commons BY-NC-SA`.
+
+This is done to protect this source code from being ABUSED for commercial targets. A lot of games are copied and injected with lootboxes; advertisements and then released into the world.
+
+I do not allow any commercial gain out of the software in this project, as it's aim is FUN. If you still would like to market/sell this software or obtain a different license; do contact me.
