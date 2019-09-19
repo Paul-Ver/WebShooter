@@ -50,7 +50,7 @@ function start(){
 	window.addEventListener("orientationchange", resize_canvas);
 
 
-	var lastTime = (new Date()).getTime();
+	var lastTime = performance.now();
     var currentTime = 0;
     var delta = 0;
 
@@ -58,7 +58,7 @@ function start(){
 	function main(){
 		ctx.clearRect(0,0, window.innerWidth,window.innerHeight);
 		ctx.beginPath();
-		currentTime = (new Date()).getTime();
+		currentTime = performance.now();
 		delta = (currentTime - lastTime) / 1000;
 		//console.log("Cur",currentTime,"Last",lastTime,"Delta",delta);
 		if(socket.readyState === socket.OPEN){
