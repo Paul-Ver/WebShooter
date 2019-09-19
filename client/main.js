@@ -50,23 +50,25 @@ function start(){
 	window.addEventListener("orientationchange", resize_canvas);
 
 
-	var now;
-	var then = Date.now();
-	var delta;
+	var lastTime = (new Date()).getTime();
+    var currentTime = 0;
+    var delta = 0;
 
 	requestAnimationFrame(main);//Start loop
-	function main(timestamp){
+	function main(){
 		ctx.clearRect(0,0, window.innerWidth,window.innerHeight);
 		ctx.beginPath();
-		delta = timestamp - then;
+		currentTime = (new Date()).getTime();
+		delta = (currentTime - lastTime) / 1000;
+		//console.log("Cur",currentTime,"Last",lastTime,"Delta",delta);
 		if(socket.readyState === socket.OPEN){
 			clearTimeout(reconnect);
 			reconnecting = false;
-			updateObjects(delta / 1000);
-			renderObjects(delta / 1000);
+			updateObjects(delta);
+			renderObjects(delta);
 			renderGUI(10,canvas.height-(chatListLength*10+10));
 			ctx.fillText("Connected!",10,20);
-			then = timestamp;//Update delta-timing
+			lastTime = currentTime;//Update delta-timing
 			requestAnimationFrame(main);
 		}else{
 			ctx.fillText("Not connected!",10,20);
@@ -99,10 +101,10 @@ function renderObjects(delta){
 function updateObjects(delta){
 	playerList.forEach(function(element) {
 		if(element !== undefined){
-			element.update();
+			element.update(delta);
 		}
 	});
-	player.update();
+	player.update(delta);
 }
 
 

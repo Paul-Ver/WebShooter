@@ -88,17 +88,18 @@ class Player extends playerBody{
 			}
 		}else{
 			if(keysDown[customKeys.left]){
-				this.x--;
+				this.x -= (100 * delta);
 			}
 			if(keysDown[customKeys.down]){
-				this.y++;
+				this.y += (100 * delta);
 			}
 			if(keysDown[customKeys.right]){
-				this.x++;
+				this.x += (100 * delta);
 			}
 			if(keysDown[customKeys.up]){
-				this.y--;
+				this.y -= (100 * delta);
 			}
+			//console.log(this.x,this.y,this.delta);
 		}
 		
 		if(keysChanged){
