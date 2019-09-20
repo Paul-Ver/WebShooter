@@ -41,7 +41,6 @@ If you make any changes to the server/client, please consider sending a pull req
 # TODO:
 
 - Fix issue with other player rotation following player's mouse movement.
-- Fix issue with player moving faster at higher refresh rate.
 - Feat weapons.
 - Feat traversible map.
 - Feat gamemodes/score.
