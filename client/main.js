@@ -22,12 +22,15 @@ var reconnecting = false;
 var server;
 var name;
 
+var lastTick = performance.now();
+var deltaTick = 0;
+var currentTick = 0;
+
 function start(){
 	//Set up canvas
 	//canvas.setAttribute("id", "game");
 	//document.body.appendChild(canvas);
-	canvas.innerHTML="Your browser doesn't support canvas. Try updating or google chrome.";
-	
+	canvas.innerHTML="Your browser doesn't support canvas. Try updating or google chrome / firefox.";
 	canvas.style.backgroundColor = 'rgba(158, 167, 184, 0.2)';
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -52,22 +55,26 @@ function start(){
 
 	var lastTime = performance.now();
     var currentTime = 0;
-    var delta = 0;
+    var drawDelta = 0;
 
 	requestAnimationFrame(main);//Start loop
+	setInterval(updateObjects, 1000/60);
 	function main(){
 		ctx.clearRect(0,0, window.innerWidth,window.innerHeight);
 		ctx.beginPath();
 		currentTime = performance.now();
-		delta = (currentTime - lastTime) / 1000;
-		//console.log("Cur",currentTime,"Last",lastTime,"Delta",delta);
+		drawDelta = (currentTime - lastTime) / 1000;
+		//console.log("Cur",currentTime,"Last",lastTime,"Delta",drawDelta);
 		if(socket.readyState === socket.OPEN){
 			clearTimeout(reconnect);
 			reconnecting = false;
-			updateObjects(delta);
-			renderObjects(delta);
+			renderObjects(drawDelta);
 			renderGUI(10,canvas.height-(chatListLength*10+10));
-			ctx.fillText("Connected!",10,20);
+			ctx.fillText("Connected!",20,10);
+			if(debugLevel>5){
+				ctx.fillText("FPS:" + Math.round(1/drawDelta),20,20);
+				ctx.fillText("Tickrate:" + Math.round(1/deltaTick),20,30);
+			}
 			lastTime = currentTime;//Update delta-timing
 			requestAnimationFrame(main);
 		}else{
@@ -98,13 +105,16 @@ function renderObjects(delta){
 	ctx.beginPath(); 
 		player.render(delta,"Jij");
 }
-function updateObjects(delta){
+function updateObjects(){
+	currentTick = performance.now();
+	deltaTick = (currentTick - lastTick) / 1000;
 	playerList.forEach(function(element) {
 		if(element !== undefined){
-			element.update(delta);
+			element.update(deltaTick);
 		}
 	});
-	player.update(delta);
+	player.update(deltaTick);
+	lastTick = currentTick;//Update delta-timing
 }
 
 
