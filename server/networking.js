@@ -9,7 +9,6 @@ wss.on('connection', function connection(ws) {
 	//Create Player
 	var player = {};
 	player.name = "Not set";
-	console.log(map.spawnpoints);
 	player.x = 0;
 	player.y = 0;	
 	
