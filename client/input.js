@@ -91,8 +91,8 @@ document.oncontextmenu = function(e){
 }
 	//Prevent right click
 function stopEvent(event){
- if(event.preventDefault != undefined)
-  event.preventDefault();
- if(event.stopPropagation != undefined)
-  event.stopPropagation();
+	if(event.preventDefault != undefined)
+		event.preventDefault();
+	if(event.stopPropagation != undefined)
+		event.stopPropagation();
 }
