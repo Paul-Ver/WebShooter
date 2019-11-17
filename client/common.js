@@ -1,7 +1,9 @@
-var msgEnum = Object.freeze({
-	"join":0,
-	"leave":1,
-	"location":2,
-	"rename":3,
-	"chat":4
-	})
+Object.freeze(	
+	MSG = {
+		JOIN: 0,
+		LEAVE: 1,
+		LOCATION: 2,
+		RENAME: 3,
+		CHAT: 4
+	}
+);
