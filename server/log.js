@@ -1,4 +1,4 @@
-module.exports = function log(){
+module.exports = function log() {
 	// 1. Convert args to a normal array
 	var args = Array.prototype.slice.call(arguments);
 	// 2. Prepend log prefix log string

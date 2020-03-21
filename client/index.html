@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Multiplayer Shooter</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="style.css">
-  </head>
-  <body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Multiplayer Shooter</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
   <canvas id="game">
-  <script src="./common.js"></script>
-  <script src="networking.js"></script>
-  <script src="player.js"></script>
-  <script src="main.js"></script>
-  <script src="input.js"></script>
-  <script>start();connect("ws://127.0.0.1:8001","Player"+Math.floor((Math.random() * 99) + 1),);</script>
-  </body>
+    <script src="./common.js"></script>
+    <script src="networking.js"></script>
+    <script src="player.js"></script>
+    <script src="main.js"></script>
+    <script src="input.js"></script>
+    <script>start(); connect("ws://127.0.0.1:8001", "Player" + Math.floor((Math.random() * 99) + 1));</script>
+</body>
+
 </html>

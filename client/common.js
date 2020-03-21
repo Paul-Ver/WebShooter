@@ -1,4 +1,4 @@
-Object.freeze(	
+Object.freeze(
 	MSG = {
 		JOIN: 0,
 		LEAVE: 1,
