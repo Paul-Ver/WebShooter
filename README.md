@@ -38,15 +38,6 @@ node main.js (from server installation directory)
 
 If you make any changes to the server/client, please consider sending a pull request.
 
-# TODO:
-
-- Rewrite server logic to https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking
-- Feat weapons.
-- Feat traversible map.
-- Feat gamemodes/score.
-- Feat sound.
-- Public server / matchmaking server.
-
 # Please contribute!
 
 If you think this project is interesting, please support it by contributing.
