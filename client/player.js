@@ -29,12 +29,15 @@ class playerBody{
 		ctx.fillStyle = "#000000";//Revert color to black
 		ctx.fillText(String(id),this.x,this.y-25);
 		ctx.textAlign = "left";
-		
-		
-		
 	}
 	update(delta){
 		
+	}
+}
+
+class OtherPlayer extends playerBody{
+	constructor(){
+		super();
 	}
 }
 

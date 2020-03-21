@@ -1,16 +1,9 @@
 var debugLevel = 10;
 var playerList = new Array();
 
-
 function log(priority, message, color){
 	if(debugLevel >= priority){
 		console.log(message);
-	}
-}
-
-class OtherPlayer extends playerBody{
-	constructor(){
-		super();
 	}
 }
 
@@ -116,6 +109,3 @@ function updateObjects(){
 	player.update(deltaTick);
 	lastTick = currentTick;//Update delta-timing
 }
-
-
-

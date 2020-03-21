@@ -1,5 +1,4 @@
 //Saving keybindings. Uses localstorage, reverts to default if localstorage is not available.
-//TODO frontend for setting keybindings.
 var originalKeys = {};
 originalKeys.up = "87";
 originalKeys.down = "83";
@@ -54,27 +53,27 @@ var mouseButtonChanged = false;
 var mouseScrolled = false;
 var mouseScrollDelta = 0;
 
-	//Mouse move
+//Mouse move
 document.onmousemove = function(mouse){
 	mouseX = mouse.clientX - document.getElementById('game').getBoundingClientRect().left;
 	mouseY = mouse.clientY - document.getElementById('game').getBoundingClientRect().top;
 	log(11,"mousemove x:" + mouseX + " y:" + mouseY);
 	mouseMoved = true;
 }
-	//Mouse down
+//Mouse down
 document.addEventListener("mousedown", function(evt) {
 	mouseDown.push(evt.which);
 	mouseButtonChanged = true;
 	log(10,"mousedown " + evt.which);
 	stopEvent(evt);
 });
-	//Mouse up
+//Mouse up
 document.addEventListener("mouseup", function(evt) {		
 	mouseDown.splice(mouseDown.indexOf(evt.which));
 	mouseButtonChanged = true;
 	log(10,"mouseup " + evt.which);
 });
-	//Mouse wheel
+//Mouse wheel
 document.addEventListener("mousewheel", MouseWheelHandler, false);		// "Regular browsers"
 document.addEventListener("DOMMouseScroll", MouseWheelHandler, false);	// Firefox
 function MouseWheelHandler(e) {// cross-browser wheel delta (https://www.sitepoint.com/html5-javascript-mouse-wheel/)
@@ -84,12 +83,11 @@ function MouseWheelHandler(e) {// cross-browser wheel delta (https://www.sitepoi
 	mouseScrolled=true;
 	mouseScrollDelta=delta;
 }
-
-	//Right click
+//Right click
 document.oncontextmenu = function(e){
 	stopEvent(e);
 }
-	//Prevent right click
+//Prevent right click
 function stopEvent(event){
 	if(event.preventDefault != undefined)
 		event.preventDefault();

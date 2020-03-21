@@ -47,4 +47,3 @@ function connect(uri,nom){
 		reconnecting = false;
 	}
 }
-

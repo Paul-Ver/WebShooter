@@ -3,7 +3,7 @@ require('../client/common');
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ port: 8001 });
 
-log("Server started, max players:",maxPlayers,MSG.JOIN);
+log("Server started, max players:",maxPlayers);
 wss.on('connection', function connection(ws) {
 	log("Client connected.");
 	//Create Player
@@ -35,7 +35,6 @@ wss.on('connection', function connection(ws) {
 	//Send the other players the new who joined.
 	log(id + " joined.");
 	broadcast( MSG.JOIN + "," + player.id,ws);
-	
 	
 	ws.on('message', (msg)=>{
 		//log(msg);
@@ -70,7 +69,6 @@ wss.on('connection', function connection(ws) {
 		delete playerList[id];
 	});
 	
-
 });
 
 function broadcast(data,exception) {
