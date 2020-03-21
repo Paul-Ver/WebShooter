@@ -40,7 +40,7 @@ If you make any changes to the server/client, please consider sending a pull req
 
 # TODO:
 
-- Fix issue with other player rotation following player's mouse movement.
+- Rewrite server logic to https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking
 - Feat weapons.
 - Feat traversible map.
 - Feat gamemodes/score.
