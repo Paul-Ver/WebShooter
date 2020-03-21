@@ -23,6 +23,9 @@ function connect(uri, nom) {
 			case MSG.RENAME://Rename
 				playerList[parseInt(args[1])].name = args[2];
 				break;
+			case MSG.ROTATION://rotation
+				playerList[parseInt(args[1])].setRot(Number(args[2]));
+				break;
 			case MSG.CHAT://Chat message
 				if (args[1] == -1) {
 					addToChat("[SERVER] " + args[2]);

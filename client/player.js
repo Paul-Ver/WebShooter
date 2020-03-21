@@ -2,16 +2,19 @@ class playerBody {
 	constructor() {
 		this.x = 0;
 		this.y = 0;
+		this.rot = 0;
+	}
+	setRot(rot){
+		this.rot = rot;
 	}
 	render(delta, id) {
 		//Shoulders
 		ctx.beginPath();
-		var dx = mouseX - this.x, dy = mouseY - this.y, rot = Math.atan2(dy, dx)
-
+		
 		ctx.save();
 		ctx.moveTo(this.x, this.y);
 		ctx.translate(this.x, this.y);
-		ctx.rotate(rot + 90 * Math.PI / 180);
+		ctx.rotate(this.rot + 90 * Math.PI / 180);
 		//ctx.roundRect(this.x-20, this.y-5, 40, 10, 3, "#0000FF")
 		ctx.roundRect(-20, -5, 40, 10, 3, "#0000FF")
 		ctx.restore();
@@ -38,6 +41,11 @@ class playerBody {
 class OtherPlayer extends playerBody {
 	constructor() {
 		super();
+		this.rot = 0;
+	}
+	setRot(rot){
+		super.setRot(rot);
+		this.rot = rot;
 	}
 }
 
@@ -51,6 +59,7 @@ class Player extends playerBody {
 	update(delta) {
 		var previousX = this.x;
 		var previousY = this.y;
+		var previousRot = this.rot;
 
 		if (mouseScrolled) {
 			//mouseScrollDelta
@@ -112,12 +121,21 @@ class Player extends playerBody {
 		}
 
 		if (previousX != this.x || previousY != this.y) {
-			socket.send('2,' + [this.x, this.y]);
+			socket.send(MSG.LOCATION + ',' + [this.x, this.y]);
+		}
+
+		var dx = mouseX - this.x, dy = mouseY - this.y;
+		this.rot = Math.atan2(dy, dx);
+		super.setRot(this.rot);
+		if (previousRot != this.rot){
+			console.log("rot changed");
+			socket.send(MSG.ROTATION + ',' + this.rot);
 		}
 	}
 
 	render(delta, id) {
 		super.render(delta, id);//Head
+		
 		//Gun
 		ctx.stroke();
 		drawLineLength(this.x, this.y, mouseX, mouseY, 20);//Aim

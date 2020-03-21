@@ -12,7 +12,6 @@ wss.on('connection', function connection(ws) {
 	player.x = 0;
 	player.y = 0;
 
-
 	var id = findEmptyPlayerSlot();
 
 	//Check if server is full, and if so disconnect the client (will automatically attempt to reconnect, thus making a queue)
@@ -54,6 +53,12 @@ wss.on('connection', function connection(ws) {
 			case MSG.CHAT:
 				broadcast(MSG.CHAT + "," + player.id + "," + args[1], ws);
 				log(id + " said: " + args[1]);
+				break;
+			case MSG.ROTATION:
+				broadcast(MSG.ROTATION + "," + player.id + "," + args[1], ws);
+				break;
+			default:
+				console.log("UNKNOWN MSG:", msg);
 				break;
 		}
 	});
