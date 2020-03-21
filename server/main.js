@@ -9,4 +9,3 @@ playerList = new Array(maxPlayers).fill();
 
 require('./networking');
 require('./console');
-
