@@ -128,7 +128,6 @@ class Player extends playerBody {
 		this.rot = Math.atan2(dy, dx);
 		super.setRot(this.rot);
 		if (previousRot != this.rot){
-			console.log("rot changed");
 			socket.send(MSG.ROTATION + ',' + this.rot);
 		}
 	}
