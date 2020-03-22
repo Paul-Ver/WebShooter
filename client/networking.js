@@ -8,11 +8,13 @@ function connect(uri, nom) {
 		//console.log(args);
 		switch (parseInt(args[0])) {
 			case MSG.JOIN://Player join
+				addToChat(`Player ${args[1]} joined: ${args[2]}`);
 				playerList[parseInt(args[1])] = new OtherPlayer();
 				playerList[parseInt(args[1])].name = args[2];
 				playerList[parseInt(args[1])].id = args[1];
 				break;
 			case MSG.LEAVE://Player leave
+				addToChat(`Player ${args[1]}: ${playerList[parseInt(args[1])].name} left the game.`);
 				playerList[parseInt(args[1])] = undefined;
 				break;
 			case MSG.LOCATION://Player location change
@@ -29,8 +31,8 @@ function connect(uri, nom) {
 			case MSG.CHAT://Chat message
 				if (args[1] == -1) {
 					addToChat("[SERVER] " + args[2]);
-					//console.log("[Server]:",args[2]);
 				} else {
+					console.log(args[1]);
 					addToChat(playerList[parseInt(args[1])].name + ": " + args[2]);
 				}
 				break;

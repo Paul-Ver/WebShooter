@@ -1,3 +1,4 @@
+require("../client/common");
 const readline = require('readline');
 const rl = readline.createInterface({
 	input: process.stdin,
@@ -30,7 +31,7 @@ rl.on('line', (line) => {
 						client.close();
 					}
 				});
-				broadcast(MSG.CHAT + "," + -1 + "," + "Kicked player: " + commands[1] + " because of " + commands[2]);
+				net.broadcast(MSG.CHAT + "," + -1 + "," + "Kicked player: " + commands[1] + " because of " + commands[2]);
 			}
 			break;
 		case "/stop":
@@ -42,14 +43,14 @@ rl.on('line', (line) => {
 			} else {
 				process.exit(0);
 			}
-			broadcast(MSG.CHAT + "," + -1 + "," + "Server shutting down in: " + commands[1] + " seconds because of " + commands[2]);
+			net.broadcast(MSG.CHAT + "," + -1 + "," + "Server shutting down in: " + commands[1] + " seconds because of " + commands[2]);
 			break;
 		case "/clear":
 			clearTimeout(stopTimer);
-			broadcast(MSG.CHAT + "," + -1 + "," + "Server shutdown interrupted by server.");
+			net.broadcast(MSG.CHAT + "," + -1 + "," + "Server shutdown interrupted by server.");
 			break;
 		default:
-			broadcast(MSG.CHAT + "," + -1 + "," + line);
+			net.broadcast(MSG.CHAT + "," + -1 + "," + line);
 			log("Command not found, try: /help");
 			break;
 	}

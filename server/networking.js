@@ -1,109 +1,69 @@
-require('../client/common');
-
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8001 });
+const Player = require('./player');
 
-log("Server started, max players:", maxPlayers);
-wss.on('connection', function connection(ws) {
-	log("Client connected.");
-	//Create Player
-	var player = {};
-	player.name = "Not set";
-	player.x = 0;
-	player.y = 0;
-
-	var id = findEmptyPlayerSlot();
-
-	//Check if server is full, and if so disconnect the client (will automatically attempt to reconnect, thus making a queue)
-	if (id >= maxPlayers) {
-		ws.terminate();
-		ws.close();
-		log("Server is full!");
-		return;
+class Network{
+	constructor(wsport,maxPlayers){
+		log(`Starting server on: ${wsport}`)
+		this.playerList = new Array(maxPlayers).fill();
+		this.wss = new WebSocket.Server({ port: wsport });
+		this.wss.on('connection', (ws)=>{
+			let id = this.findEmptyPlayerSlot();
+			if (id == -1) {
+				ws.terminate();
+				ws.close();
+				log("Player tried to join, server is full!");
+				return;
+			}
+			for(let player of this.playerList){
+				if(player != undefined){
+					ws.send(`${MSG.JOIN},${player.id},${player.name}`);
+				}
+			}
+			this.broadcast(`${MSG.JOIN},${id},unset`)
+			this.playerList[id] = new Player();
+			this.playerList[id].id = id;
+			log(`Player ${id}: joined the server.`);
+			ws.on('message', (msg)=>{this.handleMessage(msg, id, ws)});
+			ws.on('close', () => {this.close(id)});
+		});
 	}
-	//If a player joins, send him all current players.
-	playerList.forEach(function (element) {
-		if (element != undefined) {
-			ws.send(MSG.JOIN + ","/*connect*/ + element.id + "," + element.name);
-		}
-	});
-	playerList[id] = player;
-	playerList[id].id = id;
-	ws.playerid = id;
-	log("Player List:", playerList);
-	//Send the other players the new who joined.
-	log(id + " joined.");
-	broadcast(MSG.JOIN + "," + player.id, ws);
-
-	ws.on('message', (msg) => {
-		var args = String(msg).split(",");
-
-		switch (parseInt(args[0])) {
-			case MSG.LOCATION:
-				player.x = parseInt(args[1]);
-				player.y = parseInt(args[2]);
-				broadcast(MSG.LOCATION + "," + player.id + "," + args[1] + "," + args[2], ws);
-				break;
+	handleMessage(msg, id, ws){
+		const args = String(msg).split(",");
+		switch(parseInt(args[0])){
 			case MSG.RENAME:
-				broadcast(MSG.RENAME + "," + player.id + "," + args[1], ws);
-				player.name = args[1];
-				log(player.id + " name changed", player.name);
+				log(`Player ${id}: name "${this.playerList[id].name}" changed to "${args[1]}"`);
+				this.playerList[id].name = args[1];
+				this.broadcast(`${MSG.RENAME},${id},${args[1]}`);
 				break;
 			case MSG.CHAT:
-				broadcast(MSG.CHAT + "," + player.id + "," + args[1], ws);
-				log(id + " said: " + args[1]);
-				break;
-			case MSG.ROTATION:
-				broadcast(MSG.ROTATION + "," + player.id + "," + args[1], ws);
+				log(`Player ${id}: ${this.playerList[id].name} said: ${args[1]}`);
+				this.broadcast(`${MSG.CHAT},${id},${args[1]}`,ws);
 				break;
 			default:
-				console.log("UNKNOWN MSG:", msg);
-				args.splice(1,0,""+player.id);
-				broadcast(String(args),ws);
+				log(`Server Unhandled Received: ${msg}`);
 				break;
 		}
-	});
-
-	ws.isAlive = true;
-	ws.on('pong', heartbeat);
-	ws.on('error', (err) => {
-		log(err);
-	});
-	ws.on('close', () => {
-		log(player.id + " - " + player.name + " has left the server.");
-		broadcast(MSG.LEAVE + "," + player.id, ws);
-		delete playerList[id];
-	});
-
-});
-
-function broadcast(data, exception) {
-	wss.clients.forEach(function each(client) {
-		if (client.readyState === WebSocket.OPEN && client != exception) {
-			client.send(data);
-		}
-	});
-};
-
-function findEmptyPlayerSlot() {
-	for (var i = 0; i < playerList.length; i++) {
-		if (playerList[i] == undefined) {
-			return i;
+	}
+	broadcast(msg,exception){
+		for(let client of this.wss.clients){
+			if (client.readyState === WebSocket.OPEN && client != exception) {
+				client.send(msg);
+			}
 		}
 	}
-	return playerList.length;
+	close(id){
+		log(`Player ${id}: ${this.playerList[id].name} has left the server.`);
+		this.broadcast(MSG.LEAVE + "," + id);
+		delete this.playerList[id];
+	}
+	findEmptyPlayerSlot(){
+		for (var i = 0; i < this.playerList.length; i++) {
+			if (this.playerList[i] == undefined) {
+				console.log("Empty player slot " + i);
+				return i;
+			}
+		}
+		return -1;
+	}
 }
-
-//Hearthbeat check (as in example of WS library)
-function heartbeat() {
-	this.isAlive = true;
-}
-
-const interval = setInterval(function ping() {
-	wss.clients.forEach(function each(ws) {
-		if (ws.isAlive === false) return ws.terminate();
-		ws.isAlive = false;
-		ws.ping(noop);
-	});
-}, 10000);
-function noop() { }
+module.exports = Network;

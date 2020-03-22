@@ -120,16 +120,16 @@ class Player extends playerBody {
 			delete keysDown[-1];
 		}
 
-		if (previousX != this.x || previousY != this.y) {
-			socket.send(MSG.LOCATION + ',' + [this.x, this.y]);
-		}
+		// if (previousX != this.x || previousY != this.y) {
+		// 	socket.send(MSG.LOCATION + ',' + [this.x, this.y]);
+		// }
 
 		var dx = mouseX - this.x, dy = mouseY - this.y;
 		this.rot = Math.atan2(dy, dx);
 		super.setRot(this.rot);
-		if (previousRot != this.rot){
-			socket.send(MSG.ROTATION + ',' + this.rot);
-		}
+		// if (previousRot != this.rot){
+		// 	socket.send(MSG.ROTATION + ',' + this.rot);
+		// }
 	}
 
 	render(delta, id) {
@@ -165,7 +165,7 @@ function renderGUI(x, y) {
 	ctx.globalAlpha = 1;
 }
 function chat(message) {
-	socket.send("4," + message);
+	socket.send(MSG.CHAT + "," + message);
 	chatHistory.shift();
 	chatHistory.push(name + "> " + message);
 	console.log(chatHistory);

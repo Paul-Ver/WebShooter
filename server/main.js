@@ -1,11 +1,8 @@
-//TODO join/leave messages (with player id))
-//TODO chat
-//TODO server authorization
-
 //Global variables
-log = require('./log');
+const Network = require('./networking');
 maxPlayers = 20;
 playerList = new Array(maxPlayers).fill();
 
-require('./networking');
-require('./console');
+log = require('./log');
+net = new Network(8001,20);
+cons = require('./console');
