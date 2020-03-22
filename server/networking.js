@@ -39,7 +39,22 @@ wss.on('connection', function connection(ws) {
 		//log(msg);
 		var args = String(msg).split(",");
 		//log("RECEIVE:",args);
-		switch (parseInt(args[0])) {
+
+		args.splice(1,0,""+player.id);
+		console.log(JSON.stringify(args));
+		broadcast(String(args),ws);
+
+		//Example of non-authorative server.
+		//This server will broadcast every incoming message of any player; to all other players.
+		//The players themselves will send their rotation/location.
+
+		//This makes the server code very simple.
+		//For example; to add bullets; only client-sided you'll have to implement that "message id 6 = bullet". And thus implement that the client will send "6" when shooting, and makes the otherplayer spawn a bullet when "6" is received.
+			//This will instantly work on the server; because the server doesn't care, and will forward it.
+			//You can however; add a 'firewall' or rate limiting on the server, so that if the "bullet" message is received from client 1, it will stop forwarding bullet messages of this client for x amount of time.
+			//Pushing this code as an example; I'm going to refactor the networking next iteration.
+
+		/*switch (parseInt(args[0])) {
 			case MSG.LOCATION: //location
 				player.x = parseInt(args[1]);
 				player.y = parseInt(args[2]);
@@ -60,7 +75,7 @@ wss.on('connection', function connection(ws) {
 			default:
 				console.log("UNKNOWN MSG:", msg);
 				break;
-		}
+		}*/
 	});
 
 	ws.isAlive = true;
